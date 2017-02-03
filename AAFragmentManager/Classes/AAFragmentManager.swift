@@ -98,9 +98,7 @@ open class AAFragmentManager: UIView {
         }
     }
     
-    open func back(){
-        replaceFragment(index: historyIndex.last!, shouldAnimate: true, shouldFit: true, allowSameFragment: false, isBack: true)
+    open func back(_ isAnimate:Bool = false){
+        replaceFragment(index: historyIndex.last!, shouldAnimate: isAnimate, shouldFit: true, allowSameFragment: false, isBack: true)
     }
 }
-
-
