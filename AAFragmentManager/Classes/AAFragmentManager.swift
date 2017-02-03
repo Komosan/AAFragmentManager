@@ -17,6 +17,8 @@ open class AAFragmentManager: UIView {
     
     var currentFragmentIndex: Int = -1
     
+    open var historyIndex = [Int]()
+    
     override init (frame : CGRect) {
         super.init(frame : frame)
         
@@ -28,13 +30,13 @@ open class AAFragmentManager: UIView {
         if viewExists(defaultIndex) {
             replaceFragment(index: defaultIndex, shouldAnimate: false)
         }
-
+        
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     func initTranstion() {
         
         transition.duration = 0.3
@@ -55,7 +57,7 @@ open class AAFragmentManager: UIView {
         return nil
     }
     
-    open func replaceFragment(index: Int, shouldAnimate animate: Bool = true, shouldFit fit: Bool = true, allowSameFragment sameFragment: Bool = false) {
+    open func replaceFragment(index: Int, shouldAnimate animate: Bool = true, shouldFit fit: Bool = true, allowSameFragment sameFragment: Bool = false, isBack:Bool = false) {
         
         guard viewExists(index) else {
             return
@@ -78,15 +80,26 @@ open class AAFragmentManager: UIView {
             else {
                 self.layer.removeAnimation(forKey: kCATransition)
             }
+            
+            if isBack {
+                historyIndex.removeLast()
+            }else{
+                historyIndex.append(currentFragmentIndex)
+            }
+            
             currentFragmentIndex = index
-
-            view.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: view.frame.height)
-
+            
+            view.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+            
             let heightView = fit ? view : self
             view.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: heightView.frame.height)
             self.addSubview(view)
             
         }
+    }
+    
+    open func back(){
+        replaceFragment(index: historyIndex.last!, shouldAnimate: true, shouldFit: true, allowSameFragment: false, isBack: true)
     }
 }
 
