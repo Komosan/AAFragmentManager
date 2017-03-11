@@ -15,7 +15,7 @@ open class AAFragmentManager: UIView {
     
     let transition: CATransition = CATransition()
     
-    var currentFragmentIndex: Int = -1
+    open private(set) var currentFragmentIndex: Int = -1
     
     open var historyIndex = [Int]()
     
